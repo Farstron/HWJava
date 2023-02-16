@@ -21,7 +21,9 @@ public class HW2 {
         String inputFileName = "D:/GeBr/HWJava/HW2/demo.txt";
         // String[] input = Reader(inputFileName);
         int[] num = Reader(inputFileName);
-        System.out.println(num[1]);
+        long res = 1;
+        res = POW(num,res);
+        System.out.println(res);
     }
 
     public static int[] Reader (String Path){
@@ -53,5 +55,12 @@ public class HW2 {
         return out;
     }
 
-    
+    public static long POW(int[] num, long res){
+        if (num[1] != 0){
+            res *= num[0];
+            num[1] -= 1; 
+            return POW(num,res);
+        }return res;
+        
+    }
 }
