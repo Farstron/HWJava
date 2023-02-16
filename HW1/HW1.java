@@ -4,7 +4,9 @@ import java.util.Scanner;
 public class HW1 {
 
     public static void main(String[] args) {
-        
+        String way = "";
+        int n=Read(way);
+        System.out.println(n_triangle(n));
     }
     public static int n_triangle(int n) {
         int res = (n*(n+1))/2;
