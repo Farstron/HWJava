@@ -19,4 +19,7 @@ public class HW1 {
         }
         return n;
     }
+    public static String Print_str(int res){
+        return String.valueOf(res);
+    }
 }
