@@ -12,18 +12,19 @@ package HW2;
 // 1000
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HW2 {
     public static void main(String[] args) {
-        String inputFileName = "D:/GeBr/HWJava/HW2/demo.txt";
-        // String[] input = Reader(inputFileName);
+        String inputFileName = "D:/GeBr/HWJava/HW2/input.txt";
+        String outputFileName = "D:/GeBr/HWJava/HW2/output.txt";
         int[] num = Reader(inputFileName);
         long res = 1;
         res = POW(num,res);
-        System.out.println(res);
+        WriteToTxt(res,outputFileName);
     }
 
     public static int[] Reader (String Path){
@@ -62,5 +63,16 @@ public class HW2 {
             return POW(num,res);
         }return res;
         
+    }
+
+    public static void WriteToTxt(long num, String path){
+        try(FileWriter writer = new FileWriter(path, false))
+        {
+            writer.write(String.valueOf(num));
+            writer.flush();
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        } 
     }
 }
