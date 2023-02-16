@@ -13,24 +13,45 @@ package HW2;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HW2 {
     public static void main(String[] args) {
         String inputFileName = "D:/GeBr/HWJava/HW2/demo.txt";
-        String[] input = Reader(inputFileName);
+        // String[] input = Reader(inputFileName);
+        int[] num = Reader(inputFileName);
+        System.out.println(num[1]);
     }
 
-    public static String[] Reader (String Path){
-        String[] lines={" "," "," "};
-        int i =0;
+    public static int[] Reader (String Path){
+        int[] out={0,0};
+        String line = "";
         try (BufferedReader reader = new BufferedReader(new FileReader(Path))) {
-			while ((lines[i] = reader.readLine()) != null) {
-                i+=1;
+			while ((line = reader.readLine()) != null) {
+                int temp = 0;
+                Pattern pattern = Pattern.compile("\\d+");
+                Matcher matcher = pattern.matcher(line);
+                int start = 0;
+                while (matcher.find(start)) {
+                String value = line.substring(matcher.start(), matcher.end());
+                int result = Integer.parseInt(value);
+                temp=result;
+                start = matcher.end();
+                if (line.charAt(0) == 'a'){
+                        out[0]=temp;
+                     }
+                     else{
+                        out[1]=temp;
+                     }
+                }
 			}
 		}
                 catch (IOException e) {
 			e.printStackTrace();
 		}
-        return lines;
+        return out;
     }
+
+    
 }
