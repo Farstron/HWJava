@@ -4,7 +4,10 @@ package HW3;
 public class HW3 {
 
     public static void main(String[] args) {
-        
+        int[] array = new int[] {15,78,89,9,12,12546,8,879,16,54,1};
+        System.out.println(arrayToString(array));
+        array = mergeSort(array);
+        System.out.println(arrayToString(array));
     }
 
     private static void merge(int[] src1, int src1Start, int[] src2, int src2Start, int[] dest,
@@ -52,7 +55,7 @@ public class HW3 {
 
             size = size * 2;
 
-            System.out.println(arrayToString(currentSrc));
+            // System.out.println(arrayToString(currentSrc));
         }
         return currentSrc;
     }
