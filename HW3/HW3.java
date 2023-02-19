@@ -35,5 +35,25 @@ public class HW3 {
         }
     }
 
-    
+    public static int[] mergeSort(int[] array) {
+        int[] tmp;
+        int[] currentSrc = array;
+        int[] currentDest = new int[array.length];
+
+        int size = 1;
+        while (size < array.length) {
+            for (int i = 0; i < array.length; i += 2 * size) {
+                merge(currentSrc, i, currentSrc, i + size, currentDest, i, size);
+            }
+
+            tmp = currentSrc;
+            currentSrc = currentDest;
+            currentDest = tmp;
+
+            size = size * 2;
+
+            System.out.println(arrayToString(currentSrc));
+        }
+        return currentSrc;
+    }
 }
