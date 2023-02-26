@@ -5,18 +5,30 @@ import java.util.ArrayDeque;
 class Coordinates{
     int X;
     int Y;
+    Coordinates(){
+        this.X = 0;
+        this.Y = 0;
+    }
     Coordinates(int x, int y) {
         this.X = x;
         this.Y = y;
     }
 }
 class MinCoordinates{
-    int min;
-    Coordinates co;
-    MinCoordinates(int min, Coordinates co) {
-        this.min = min;
-        this.co = co;
+    int[] min;
+    Coordinates[] co = {new Coordinates(),new Coordinates(),new Coordinates(),new Coordinates(),new Coordinates()};
+    static int countMinCoordinates = 0; 
+    MinCoordinates() {
+        this.min = new int[5];
+
     }
+    // void add(int m, Coordinates c){
+    //     if (countMinCoordinates<5){
+    //     this.min[countMinCoordinates] = m;
+    //     this.co[countMinCoordinates] = c;
+    //     countMinCoordinates += 1;}
+    //     else{System.out.println("Переполнение!");}
+    // }
 }
 public class vave {
     
@@ -29,7 +41,10 @@ public class vave {
         drawMap(map);
         maping(map,Queue);
         drawMap(map);
+        Queue.remove();
+        Queue.remove();
         Queue.add(addEscape(7,4,map));
+        Queue.add(addEscape(7,7,map));
         drawMap(map);
         findWay(map, Queue);
         drawMap(map);
@@ -104,21 +119,22 @@ public class vave {
         return test;
     }
     public static void findWay(int[][] map,ArrayDeque<Coordinates> qC){
-        if (map[qC.getFirst().Y+1][qC.getFirst().X] != 1 &&
-        map[qC.getFirst().Y-1][qC.getFirst().X] != 1 &&
-        map[qC.getFirst().Y][qC.getFirst().X+1] != 1 &&
+        if (map[qC.getFirst().Y+1][qC.getFirst().X] != 1 ||
+        map[qC.getFirst().Y-1][qC.getFirst().X] != 1 ||
+        map[qC.getFirst().Y][qC.getFirst().X+1] != 1 ||
         map[qC.getFirst().Y][qC.getFirst().X-1] != 1){
             System.out.println(qC.getFirst().X+","+qC.getFirst().Y);
             findMin(map,qC);
             System.out.println(qC.getFirst().X+","+qC.getFirst().Y);
             map[qC.getFirst().Y][qC.getFirst().X]=0;
-            // findWay(map,qC);
+            findWay(map,qC);
         }
         map[qC.getFirst().Y][qC.getFirst().X]=0; 
         System.out.println(qC.getFirst().X+","+qC.getFirst().Y);
     }
     public static void findMin(int[][] map, ArrayDeque<Coordinates> qC){
-        MinCoordinates mC = new MinCoordinates(map[qC.getFirst().Y][qC.getFirst().X], new Coordinates(qC.getFirst().X, qC.getFirst().Y));
+        MinCoordinates mC = new MinCoordinates();
+        int posMin=0;
         while(qC.peek()!=null){
             Coordinates temp = new Coordinates(0, 0);
             temp.X = qC.getFirst().X;
@@ -128,38 +144,54 @@ public class vave {
             checkRight(temp,map,mC);
             checkDown(temp,map,mC);
             checkLeft(temp,map,mC);
+            for (int i = 0; i<4; i++){
+                if (mC.min[4]>0){
+                    if (mC.min[4]>mC.min[i]){
+                        mC.min[4]=mC.min[i];
+                        mC.co[4].X=mC.co[i].X;
+                        mC.co[4].Y=mC.co[i].Y;
+                        posMin=i;
+                    }else {
+                        mC.min[4]=mC.min[i];
+                        mC.co[4].X=mC.co[i].X;
+                        mC.co[4].Y=mC.co[i].Y;
+                        posMin=i;
+                    }
+                }
+            }
         }
         
-        qC.add(mC.co);
+        qC.add(mC.co[posMin]);
     }
     public static void checkUp(Coordinates pos, int[][] map, MinCoordinates mC){
-        System.out.println(mC.min+"----"+map[pos.Y+1][pos.X]);
-        if (map[pos.Y+1][pos.X] < mC.min && map[pos.Y+1][pos.X]>0){
-            mC.min=map[pos.Y+1][pos.X];
-            mC.co.X=pos.X;
-            mC.co.Y=pos.Y+1;
+        System.out.println(mC.co[0].X+"----"+map[pos.Y-1][pos.X]);
+        if (map[pos.Y-1][pos.X]>0){
+            mC.min[0]=map[pos.Y-1][pos.X];
+            mC.co[0].X=pos.X;
+            mC.co[0].Y=pos.Y-1;
+            System.out.println(mC.min+"-++-"+map[pos.Y-1][pos.X]);
         }
         
     }
     public static void checkRight(Coordinates pos, int[][] map, MinCoordinates mC){
-        if (map[pos.Y][pos.X+1] < mC.min && map[pos.Y][pos.X+1]>0){
-            mC.min=map[pos.Y][pos.X+1];
-            mC.co.X=pos.X+1;
-            mC.co.Y=pos.Y;
+        if (map[pos.Y][pos.X+1]>0){
+            mC.min[1]=map[pos.Y][pos.X+1];
+            mC.co[1].X=pos.X+1;
+            mC.co[1].Y=pos.Y;
         }
     }
     public static void checkDown(Coordinates pos, int[][] map, MinCoordinates mC){
-        if (map[pos.Y-1][pos.X] < mC.min && map[pos.Y-1][pos.X]>0){
-            mC.min=map[pos.Y-1][pos.X];
-            mC.co.X=pos.X;
-            mC.co.Y=pos.Y-1;
+        if (map[pos.Y+1][pos.X]>0){
+            mC.min[2]=map[pos.Y+1][pos.X];
+            mC.co[2].X=pos.X;
+            mC.co[2].Y=pos.Y+1;
         }
     }
     public static void checkLeft(Coordinates pos, int[][] map, MinCoordinates mC){
-        if (map[pos.Y][pos.X-1] < mC.min && map[pos.Y][pos.X-1]>0){
-            mC.min=map[pos.Y][pos.X-1];
-            mC.co.X=pos.X-1;
-            mC.co.Y=pos.Y;
+        if (map[pos.Y][pos.X-1]>0){
+            mC.min[3]=map[pos.Y][pos.X-1];
+            mC.co[3].X=pos.X-1;
+            mC.co[3].Y=pos.Y;
         }
     }
     public static Coordinates addEscape(int x,int y,int[][] map){
